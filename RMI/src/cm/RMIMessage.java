@@ -1,4 +1,4 @@
-package util;
+package cm;
 
 
 import java.io.Serializable;
@@ -25,11 +25,9 @@ public class RMIMessage {
       System.err.println("obj null pointer");
      
     Pair<Serializable, String[]> sendpair = new Pair<Serializable, String[]>(obj, args);
+    // only obj byte array, type byte is added in ByteSender
     byte[] objarr = ser.serializeObj(sendpair);
-    byte[] res = new byte[objarr.length + TYPELEN];
-    res[0] = INV;
-    System.arraycopy(objarr, 0, res, TYPELEN, objarr.length);
-    return res;
+    return objarr;
   }
   
   /**
@@ -39,10 +37,7 @@ public class RMIMessage {
     if(obj == null)
       System.err.println("obj null pointer");
     byte[] objarr = ser.serializeObj(obj);
-    byte[] res = new byte[objarr.length + TYPELEN];
-    res[0] = RET;
-    System.arraycopy(objarr, 0, res, TYPELEN, objarr.length);
-    return res;
+    return objarr;
   }
   
   /**
@@ -52,10 +47,7 @@ public class RMIMessage {
     if(ex == null)
       System.err.println("obj null pointer");
     byte[] objarr = ser.serializeObj(ex);
-    byte[] res = new byte[objarr.length + TYPELEN];
-    res[0] = EX;
-    System.arraycopy(objarr, 0, res, TYPELEN, objarr.length);
-    return res;
+    return objarr;
   }
   
   
@@ -66,10 +58,10 @@ public class RMIMessage {
     if(bytes == null || bytes.length == 0)
       System.err.println("input null or 0 length");
     
-    byte type = bytes[0];
-    byte[] content = Arrays.copyOfRange(bytes, 1, bytes.length);
+//    byte type = bytes[0];
+//    byte[] content = Arrays.copyOfRange(bytes, 1, bytes.length);
     
-    Pair<Serializable, String[]> pair = (Pair<Serializable, String[]>)ser.deserializeObj(content);
+    Pair<Serializable, String[]> pair = (Pair<Serializable, String[]>)ser.deserializeObj(bytes);
     return pair;
   }
   
@@ -80,10 +72,10 @@ public class RMIMessage {
     if(bytes == null || bytes.length == 0)
       System.err.println("input null or 0 length");
     
-    byte type = bytes[0];
-    byte[] content = Arrays.copyOfRange(bytes, 1, bytes.length);
+//    byte type = bytes[0];
+//    byte[] content = Arrays.copyOfRange(bytes, 1, bytes.length);
     
-    Serializable ret = (Serializable)ser.deserializeObj(content);
+    Serializable ret = (Serializable)ser.deserializeObj(bytes);
     return ret;
   }
   
@@ -94,10 +86,10 @@ public class RMIMessage {
     if(bytes == null || bytes.length == 0)
       System.err.println("input null or 0 length");
     
-    byte type = bytes[0];
-    byte[] content = Arrays.copyOfRange(bytes, 1, bytes.length);
+//    byte type = bytes[0];
+//    byte[] content = Arrays.copyOfRange(bytes, 1, bytes.length);
     
-    Exception ret = (Exception)ser.deserializeObj(content);
+    Exception ret = (Exception)ser.deserializeObj(bytes);
     return ret;
   }
 

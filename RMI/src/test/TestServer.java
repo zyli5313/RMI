@@ -7,68 +7,43 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
-import util.Pair;
-import util.RMIMessage;
+import cm.CommReceiver;
+import cm.CommSender;
+import cm.Pair;
+import cm.RMIMessage;
 
-public class TestServer implements Runnable{
+
+public class TestServer implements Runnable {
 
   private boolean debug = true;
-  
+
   private int port = 4444;
-  
+
   public void printDebugInfo(String s) {
     if (debug)
       System.out.println("CommSlaveListenThread: " + s);
   }
-  
+
   public void testServer() {
-    try {
-      ServerSocket socket = new ServerSocket(port);
-      Socket insocket = socket.accept( );
-      
-      InputStream is = insocket.getInputStream();
-      DataInputStream dis = new DataInputStream(is);
+    CommReceiver recver = new CommReceiver();
+    byte[] res = recver.recv();
+    byte type = res[0];
+    byte[] objarr = Arrays.copyOfRange(res, RMIMessage.TYPELEN, res.length);
 
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      byte buffer[] = new byte[1024];
-      int s;
-      byte[] bytearray = null;
-
-      int cnt = 0;
-
-      printDebugInfo("SlaveListen: total num: " + cnt);
-
-      for (; (s = dis.read(buffer)) != -1;) {
-        printDebugInfo("SlaveListen: " + s);
-        baos.write(buffer, 0, s);
-        cnt += s;
-      }
-      printDebugInfo("SlaveListen: total num: " + cnt);
-      bytearray = baos.toByteArray();
-
-      if (bytearray != null && cnt != 0) {
-        byte[] res = baos.toByteArray();
-        RMIMessage msg = new RMIMessage();
-        Pair<Serializable, String[]> pair = (Pair<Serializable, String[]>)msg.unmarshallInvoke(res);
-        Hello hl = (Hello)pair.getLeft();
-        hl.say(pair.getRight());
-      }
-        
-      baos.close();
-      dis.close();
-      socket.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    RMIMessage msg = new RMIMessage();
+    Pair<Serializable, String[]> pair = (Pair<Serializable, String[]>) msg.unmarshallInvoke(objarr);
+    Hello hl = (Hello) pair.getLeft();
+    hl.say(pair.getRight());
   }
-  
+
   @Override
   public void run() {
     // TODO Auto-generated method stub
     testServer();
   }
-  
+
   /**
    * @param args
    */
@@ -79,6 +54,5 @@ public class TestServer implements Runnable{
     Thread t = new Thread(new TestClient());
     t.start();
   }
-
 
 }

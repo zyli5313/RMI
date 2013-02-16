@@ -5,8 +5,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import util.ByteSender;
-import util.RMIMessage;
+import cm.CommSender;
+import cm.RMIMessage;
+
 
 public class TestClient implements Runnable{
   
@@ -23,7 +24,7 @@ public class TestClient implements Runnable{
     RMIMessage msg = new RMIMessage();
     
     byte[] res = msg.marshallInvoke(hl, args);
-    ByteSender sender = new ByteSender(host, port, type, res);
+    CommSender sender = new CommSender(host, port, type, res);
     sender.run();
     System.out.println("client finish");
   }

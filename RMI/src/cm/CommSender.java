@@ -1,4 +1,4 @@
-package util;
+package cm;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,9 +11,7 @@ import java.net.UnknownHostException;
  * 
  * @author Zeyuan Li
  * */
-public class ByteSender {
-
-  private boolean debug = true;
+public class CommSender {
 
   private Socket ClientSocket;
 
@@ -30,7 +28,7 @@ public class ByteSender {
   private byte type;
 
   // hostname, port, type, info
-  public ByteSender(String hostname, int port, byte type, byte[] msg) {
+  public CommSender(String hostname, int port, byte type, byte[] msg) {
     this.hostname = hostname;
     this.msg = msg;
     this.type = type;
@@ -38,15 +36,10 @@ public class ByteSender {
     this.ClientSocket = null;
   }
 
-  public ByteSender(Socket socket, byte type, byte[] msg) {
+  public CommSender(Socket socket, byte type, byte[] msg) {
     this.ClientSocket = socket;
     this.msg = msg;
     this.type = type;
-  }
-
-  public void printDebugInfo(String s) {
-    if (debug)
-      System.out.println("ByteSender: " + s);
   }
 
   public void run() {
@@ -74,7 +67,7 @@ public class ByteSender {
       }
     }
     if (msg != null) {
-      printDebugInfo("Sending: " + (msg.length+1));
+      Util.printDebugInfo("Sending: " + (msg.length+1));
       // <type + msg>
       byte[] sendingbarray = new byte[1 + msg.length];
       sendingbarray[0] = type;
@@ -97,16 +90,16 @@ public class ByteSender {
       out.close();
       os.close();
       ClientSocket.close();
-      printDebugInfo("close socket");
+      Util.printDebugInfo("close socket");
     } catch (IOException e) {
       e.printStackTrace();
     }
-    printDebugInfo("finished");
+    Util.printDebugInfo("finished");
   }
 
   public Socket socket() {
     if (ClientSocket == null) {
-      printDebugInfo("null socket");
+      Util.printDebugInfo("null socket");
     }
     return this.ClientSocket;
   }
