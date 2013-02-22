@@ -26,22 +26,22 @@ public class TestServer implements Runnable {
       System.out.println("CommSlaveListenThread: " + s);
   }
 
-  public void testServer() {
-    CommReceiver recver = new CommReceiver();
-    byte[] res = recver.recv();
-    byte type = res[0];
-    byte[] objarr = Arrays.copyOfRange(res, RMIMessage.TYPELEN, res.length);
-
-    RMIMessage msg = new RMIMessage();
-    Pair<Serializable, String[]> pair = (Pair<Serializable, String[]>) msg.unmarshallInvoke(objarr);
-    Hello hl = (Hello) pair.getLeft();
-    hl.say(pair.getRight());
-  }
+//  public void testServer() {
+//    CommReceiver recver = new CommReceiver();
+//    byte[] res = recver.recv();
+//    byte type = res[0];
+//    byte[] objarr = Arrays.copyOfRange(res, RMIMessage.TYPELEN, res.length);
+//
+//    RMIMessage msg = new RMIMessage();
+//    Pair<Serializable, String[]> pair = (Pair<Serializable, String[]>) msg.unmarshallInvoke(objarr);
+//    Hello hl = (Hello) pair.getLeft();
+//    hl.say(pair.getRight());
+//  }
 
   @Override
   public void run() {
     // TODO Auto-generated method stub
-    testServer();
+    //testServer();
   }
 
   /**

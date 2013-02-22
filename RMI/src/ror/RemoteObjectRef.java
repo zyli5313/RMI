@@ -1,6 +1,8 @@
 package ror;
 
-public class RemoteObjectRef {
+import java.io.Serializable;
+
+public class RemoteObjectRef implements Serializable {
   public String ip = "localhost";
 
   public int port = 4444;
