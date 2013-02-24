@@ -3,6 +3,7 @@ package ror;
 import java.io.Serializable;
 
 public class RemoteObjectRef implements Serializable {
+  // default value
   public String ip = "localhost";
 
   public int port = 4444;
@@ -44,7 +45,7 @@ public class RemoteObjectRef implements Serializable {
     // Here let it return null.
     Class c = Class.forName(riname + "_stub");
     Object o = c.newInstance();
-
+    
     return o;
   }
   

@@ -22,14 +22,14 @@ public class RMIMessage implements Remote440 {
 
   public String methodName;
 
-  public String[] args;
+  public Object[] args; // incorporate multiple types
 
   public Serializable ret;
 
   public Serializable ex;
 
   // invoke msg
-  public RMIMessage(byte type, RemoteObjectRef ror, String methodName, String[] args) {
+  public RMIMessage(byte type, RemoteObjectRef ror, String methodName, Object[] args) {
     this.type = type;
     this.ror = ror;
     this.methodName = methodName;
@@ -39,7 +39,7 @@ public class RMIMessage implements Remote440 {
   }
 
   // return and exception msg
-  public RMIMessage(byte type, RemoteObjectRef ror, String methodName, String[] args,
+  public RMIMessage(byte type, RemoteObjectRef ror, String methodName, Object[] args,
           Serializable sobj) {
     this.type = type;
     this.ror = ror;

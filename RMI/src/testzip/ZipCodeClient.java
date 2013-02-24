@@ -37,7 +37,9 @@ public class ZipCodeClient {
     RemoteObjectRef ror = sr.lookup(serviceName);
 
     // get (create) the stub out of ror.
-    ZipCodeServer zcs = (ZipCodeServer) ror.localise();
+    ZipCodeServer_stub zcsStub = (ZipCodeServer_stub) ror.localise();
+    zcsStub.setRor(ror);  //IMP
+    ZipCodeServer zcs = (ZipCodeServer) zcsStub; // upcast ZipCodeServerImpl_stub to interface ZipCodeServer
 
     // reads the data and make a "local" zip code list.
     // later this is sent to the server.
