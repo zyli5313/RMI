@@ -4,6 +4,8 @@ import java.util.*;
 import java.net.*;
 import java.io.*;
 
+import cm.Util;
+
 import ror.RemoteObjectRef;
 
 public class SimpleRegistry {
@@ -34,7 +36,7 @@ public class SimpleRegistry {
     System.out.println("stream made.");
 
     // it is locate request, with a service name.
-    out.println("lookup");
+    out.println(Util.LOOKUP);
     out.println(serviceName);
 
     System.out.println("command and service name sent.");
@@ -43,29 +45,20 @@ public class SimpleRegistry {
     String res = in.readLine();
     RemoteObjectRef ror;
 
-    if (res.equals("found")) {
+    if (res.equals(Util.FOUND)) {
 
       System.out.println("it is found!.");
 
       // receive ROR data, witout check.
       String ro_IPAdr = in.readLine();
-
-      System.out.println(ro_IPAdr);
-
       int ro_PortNum = Integer.parseInt(in.readLine());
-
-      System.out.println(ro_PortNum);
-
       int ro_ObjKey = Integer.parseInt(in.readLine());
-
-      System.out.println(ro_ObjKey);
-
       String ro_InterfaceName = in.readLine();
-
-      System.out.println(ro_InterfaceName);
 
       // make ROR.
       ror = new RemoteObjectRef(ro_IPAdr, ro_PortNum, ro_ObjKey, ro_InterfaceName);
+    
+      Util.printDebugInfo(ror.toString());
     } else {
       System.out.println("it is not found!.");
 
@@ -97,7 +90,7 @@ public class SimpleRegistry {
     out.println(serviceName);
     out.println(ror.ip);
     out.println(ror.port);
-    out.println(ror.port);
+    out.println(ror.objkey);
     out.println(ror.riname);
 
     // it also gets an ack, but this is not used.

@@ -19,9 +19,6 @@ public class INVOMessage implements Serializable{
   private String[] argtypes;
   private String returntype;
   
-
-  
-  
   private Object result;
   public RemoteObjectRef ror;
   
@@ -70,4 +67,12 @@ public class INVOMessage implements Serializable{
   public Object getresult(){
     return this.result;
   }  
+  
+  @Override
+  public String toString() {
+    if(args != null && returntype != null && ror != null)
+      return String.format("type:%d\tmethod:%s\targs:%s\targtypes:%s\treturntype:%s\nror:%s\n", type, method, args[0], argtypes[0], returntype, ror.toString());
+    else
+      return String.format("type:%d\tmethod:%s\nror:%s\n", type, method, ror.toString());
+  }
 }

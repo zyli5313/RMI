@@ -4,8 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -16,7 +14,7 @@ import java.lang.reflect.Type;
 import ror.RORtbl;
 import ror.RemoteObjectRef;
 
-public class CommServerListenThread extends Thread{
+public class CopyOfCommServerListenThread extends Thread{
       private Socket socket;
       private RORtbl tbl;
       private InputStream is;
@@ -24,19 +22,20 @@ public class CommServerListenThread extends Thread{
       
       private MyUtil myutil = new MyUtil("CommServerListenThread");
       
-      public CommServerListenThread(Socket socket, RORtbl tbl){
+      public CopyOfCommServerListenThread(Socket socket, RORtbl tbl){
         this.socket = socket;
         this.tbl = tbl;
       }
       
       
-      public void serverhandler(INVOMessage invomsg){
+      public void serverhandler(byte[] bytearray){
        
+        ser = new Serializer();
+        INVOMessage invomsg = (INVOMessage) ser.deserializeObj(bytearray);
         if(invomsg.gettype() != 1){
           System.out.println("Error type in INVOMessage.");
           return;
         }
-        myutil.printDebugInfo(invomsg.toString());
         
         RemoteObjectRef ror = invomsg.getror();
         String methodname = invomsg.getmethod();
@@ -47,7 +46,6 @@ public class CommServerListenThread extends Thread{
         // (4) gets the real object reference from tbl.
         Object calledObj = tbl.findObj(ror);
 
-        // TODO: if callObj == null
         
         // (5) Either:
         // -- using the interface name, asks the skeleton,
@@ -108,45 +106,60 @@ public class CommServerListenThread extends Thread{
           return;
         }
         
+        byte[] returnbytes = ser.serializeObj(returnmsg);
         
-        ObjectOutputStream out = null;
+        OutputStream os;
+        DataOutputStream out;
         try {
-          out = new ObjectOutputStream(socket.getOutputStream());
+          os = socket.getOutputStream();
+          out = new DataOutputStream(os);
+          for (byte b : returnbytes) {
+            out.writeByte(b);
+            out.flush();
+          }
           
-          out.writeObject(returnmsg);
           
           out.close();
+          os.close();
         } catch (IOException e) {
           e.printStackTrace();
           myutil.printDebugInfo("sending return bytes error.");
         }
         
         // (7) closes the socket.
-        try {
-          socket.close();
-        } catch (IOException e) {
-          myutil.printDebugInfo("close socket error");
-          e.printStackTrace();
-        }
       }
       
       
       public void run(){
         try {
           // (1) receives an invocation request.
+          is = socket.getInputStream();
+          
           // (2) creates a socket and input/output streams.
-          ObjectInputStream in = null;
-          INVOMessage recvmsg = null;
-          in = new ObjectInputStream(socket.getInputStream());  
+          DataInputStream dis = new DataInputStream(is);
+
+          ByteArrayOutputStream baos = new ByteArrayOutputStream();
+          byte buffer[] = new byte[1024];
+          int s;
+          byte[] bytearray = null;
+
+          int cnt = 0;
+
+          for (; (s = dis.read(buffer)) != -1;) {
+            System.out.println("SlaveListen: " + s);
+            baos.write(buffer, 0, s);
+            cnt += s;
+          }
+          bytearray = baos.toByteArray();
           
-          recvmsg = (INVOMessage)in.readObject();
-          
-          if(recvmsg != null)
-            serverhandler(recvmsg);
+          dis.close();
+          is.close();
+
+          if (bytearray != null && cnt != 0)
+            serverhandler(bytearray);
+
 
         } catch (IOException e) {
-          e.printStackTrace();
-        } catch (ClassNotFoundException e) {
           e.printStackTrace();
         }
       };

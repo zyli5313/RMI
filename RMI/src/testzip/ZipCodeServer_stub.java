@@ -1,9 +1,10 @@
 package testzip;
 import java.io.*;
-import java.util.List;
+
+import java.lang.reflect.*;
 
 import cm.CommModule;
-import cm.RMIMessage;
+import cm.INVOMessage;
 
 import ror.RemoteObjectRef;
 
@@ -25,9 +26,15 @@ public class ZipCodeServer_stub implements ZipCodeServer {
   public void initialise(ZipCodeList newlist) {
     Object[] args = new Object[1];
     args[0] = newlist;
-    RMIMessage rmimsg = new RMIMessage(RMIMessage.INV, ror, "initialise", args);
+    String[] argsType = null;
+    String retType = null;
+//    String[] argsType = new String[1];
+//    argsType[0] = ZipCodeList.class.getGenericSuperclass().toString();
+//    String retType = void.class.getGenericSuperclass().toString();
+    
+    INVOMessage invomsg = new INVOMessage(ror, "initialise", args, argsType, retType);
     // get return value
-    RMIMessage recvmsg = cm.marsSendUnmarsRecv(rmimsg);
+    INVOMessage recvmsg = cm.marsSendUnmarsRecv(invomsg);
     // TODO: if exception on return msg, some logic
     
   }
@@ -36,30 +43,47 @@ public class ZipCodeServer_stub implements ZipCodeServer {
   public String find(String request) {
     Object[] args = new Object[1];
     args[0] = request;
-    RMIMessage rmimsg = new RMIMessage(RMIMessage.INV, ror, "find", args);
-    // get return value
-    RMIMessage recvmsg = cm.marsSendUnmarsRecv(rmimsg);
+    String[] argsType = new String[1];
+    argsType[0] = String.class.getGenericSuperclass().toString();
+    String retType = ((ParameterizedType)(String.class.getGenericSuperclass())).getActualTypeArguments()[0].toString();
     
-    return (String)recvmsg.ret;
+    INVOMessage invomsg = new INVOMessage(ror, "find", args, argsType, retType);
+    // get return value
+    INVOMessage recvmsg = cm.marsSendUnmarsRecv(invomsg);
+    
+    return (String)recvmsg.getresult();
   }
 
   // this very short method should send the marshalled
   // whole list to the local site.
   public ZipCodeList findAll() {
-    Object[] args = new Object[0];
-    RMIMessage rmimsg = new RMIMessage(RMIMessage.INV, ror, "findAll", args);
-    // get return value
-    RMIMessage recvmsg = cm.marsSendUnmarsRecv(rmimsg);
+//    Object[] args = new Object[0];
+//    String[] argsType = new String[1];
+    Object[] args = null;
+    String[] argsType = null;
+//    argsType[0] = ((ParameterizedType)(void.class.getGenericSuperclass())).getActualTypeArguments()[0].toString();
+    String retType = ((ParameterizedType)(ZipCodeList.class.getGenericSuperclass())).getActualTypeArguments()[0].toString();
     
-    return (ZipCodeList) recvmsg.ret;
+    INVOMessage invomsg = new INVOMessage(ror, "findAll", args, argsType, retType);
+    // get return value
+    INVOMessage recvmsg = cm.marsSendUnmarsRecv(invomsg);
+    
+    return (ZipCodeList) recvmsg.getresult();
   }
 
   // this method does printing in the remote site, not locally.
   public void printAll() {
-    Object[] args = new Object[0];
-    RMIMessage rmimsg = new RMIMessage(RMIMessage.INV, ror, "printAll", args);
-    // get return value (no return value)
-    RMIMessage recvmsg = cm.marsSendUnmarsRecv(rmimsg);
+//    Object[] args = new Object[0];
+//    String[] argsType = new String[1];
+//    argsType[0] = ((ParameterizedType)(void.class.getGenericSuperclass())).getActualTypeArguments()[0].toString();
+//    String retType = ((ParameterizedType)(void.class.getGenericSuperclass())).getActualTypeArguments()[0].toString();
+    Object[] args = null;
+    String[] argsType = null;
+    String retType = null;
+    
+    INVOMessage invomsg = new INVOMessage(ror, "printAll", args, argsType, retType);
+    // get return value
+    INVOMessage recvmsg = cm.marsSendUnmarsRecv(invomsg);
     
   }
   

@@ -2,7 +2,7 @@ package ror;
 
 import java.io.Serializable;
 
-public class RemoteObjectRef implements Serializable {
+public class RemoteObjectRef implements Remote440 {
   // default value
   public String ip = "localhost";
 

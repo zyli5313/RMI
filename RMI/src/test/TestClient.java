@@ -23,15 +23,15 @@ public class TestClient implements Runnable{
   @Override
   public void run() {
     // TODO Auto-generated method stub
-    Hello hl = new Hello();
-    String[] args = {"12","34"};
-    RemoteObjectRef ror = new RemoteObjectRef(host, port, 0, "ZipServer");
-    byte type = RMIMessage.INV;
-    RMIMessage msg = new RMIMessage(type, ror, "find", args);
-    
-    CommModule cm = new CommModule();
-    cm.marshallSend(msg);
-    System.out.println("client finish");
+//    Hello hl = new Hello();
+//    String[] args = {"12","34"};
+//    RemoteObjectRef ror = new RemoteObjectRef(host, port, 0, "ZipServer");
+//    byte type = RMIMessage.INV;
+//    RMIMessage rmimsg = new RMIMessage(type, ror, "find", args);
+//    
+//    CommModule cm = new CommModule();
+//    RMIMessage recvmsg = cm.marsSendUnmarsRecv(rmimsg);
+//    System.out.println("client finish");
   }
 
   /**

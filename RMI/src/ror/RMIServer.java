@@ -18,6 +18,9 @@ package ror;
 
 import java.net.*;
 
+import registry.LocateSimpleRegistry;
+import registry.SimpleRegistry;
+
 import cm.CommListener;
 
 public class RMIServer {
@@ -47,7 +50,7 @@ public class RMIServer {
     // you should also create a remote object table here.
     // it is a table of a ROR and a skeleton.
     // as a hint, I give such a table's interface as RORtbl.java.
-    RORtbl tbl = new RORtbl();
+    RORtbl tbl = new RORtbl(registryHost, registryPort, serviceName);
 
     // after that, you create one remote object of initialclass.
     Object o = initialclass.newInstance();
@@ -55,8 +58,6 @@ public class RMIServer {
     // then register it into the table.
     tbl.addObj(host, port, o);
 
-    
-    
     CommListener serverlisten = new CommListener(port, tbl);
     
     serverlisten.start();

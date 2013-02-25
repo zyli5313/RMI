@@ -60,6 +60,9 @@ public class RMIRegistryHdler implements Runnable {
         ror.riname = in.readLine();
         
         srvmap.put(srvname, ror);
+        // ACK
+        out.println(Util.ACK);
+        
         Util.printDebugInfo("rebind: " + ror.toString());
       }
       else {

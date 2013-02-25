@@ -1,14 +1,14 @@
 package cm;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
-public class CommModule {
+public class CopyOfCommModule {
 
   // public CommSender sender;
   private Socket ClientSocket;
@@ -23,7 +23,7 @@ public class CommModule {
 
   public Serializer ser;
 
-  public CommModule() {
+  public CopyOfCommModule() {
     ser = new Serializer();
   }
 
@@ -50,11 +50,12 @@ public class CommModule {
     }
 
     // send invoke
-    //byte[] sendBytes = ser.serializeObj(rmimsg);
-    marshallSend(rmimsg);
+    byte[] sendBytes = ser.serializeObj(rmimsg);
+    marshallSend(sendBytes);
 
     // recv reply
-    INVOMessage recmsg = unmarshallRecv();
+    byte[] recvBytes = unmarshallRecv();
+    INVOMessage recmsg = (INVOMessage) ser.deserializeObj(recvBytes);
     
     // close 
     try {
@@ -68,32 +69,42 @@ public class CommModule {
     return recmsg;
   }
   
-  public INVOMessage unmarshallRecv() {
-    ObjectInputStream in = null;
-    INVOMessage recvmsg = null;
+  public byte[] unmarshallRecv() {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {
-      in = new ObjectInputStream(ClientSocket.getInputStream());  
+      in = new DataInputStream(ClientSocket.getInputStream());
       
-      recvmsg = (INVOMessage)in.readObject();
+      byte buffer[] = new byte[1024];
+      int s;
+      byte[] bytearray = null;
+
+      int cnt = 0;
+
+      Util.printDebugInfo("SlaveListen: total num: " + cnt);
+
+      for (; (s = in.read(buffer)) != -1;) {
+        Util.printDebugInfo("SlaveListen: " + s);
+        baos.write(buffer, 0, s);
+        cnt += s;
+      }
+      Util.printDebugInfo("SlaveListen: total num: " + cnt);
+      bytearray = baos.toByteArray();
+
+      if (bytearray == null && cnt == 0) {
+        System.err.println("Recv error!");
+      }
+      
     } catch (IOException e) {
-      e.printStackTrace();
-    } catch (ClassNotFoundException e) {
       e.printStackTrace();
     }
     
-    return recvmsg;
+    return baos.toByteArray();
   }
 
-  public void marshallSend(INVOMessage msg) {
-    ObjectOutputStream out = null;
+  public void marshallSend(byte[] msg) {
     try {
-      out = new ObjectOutputStream(ClientSocket.getOutputStream());   
+      out = new DataOutputStream(ClientSocket.getOutputStream());
 
-      Util.printDebugInfo(msg.toString());
-      
-      out.writeObject(msg);
-      
-      Util.printDebugInfo("finished");
     } catch (UnknownHostException e) {
       System.err.println("ByteSender: Don't know about host: " + hostname);
       System.exit(1);
@@ -101,7 +112,20 @@ public class CommModule {
       System.err.println("ByteSender: Couldn't get I/O for the connection to:" + hostname);
       System.exit(1);
     }
+    if (msg != null) {
 
+      try {
+        for (byte b : msg) {
+          out.writeByte(b);
+          out.flush();
+        }
+      } catch (IOException e) {
+        System.err.println(e);
+        e.printStackTrace();
+      }
+
+      Util.printDebugInfo("finished");
+    }
   }
 
 //  public RMIMessage unmarshall(byte[] recvBytes) {

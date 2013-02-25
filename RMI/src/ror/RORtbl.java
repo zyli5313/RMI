@@ -1,6 +1,12 @@
 package ror;
 
+import java.io.IOException;
 import java.util.*;
+
+import cm.Util;
+
+import registry.LocateSimpleRegistry;
+import registry.SimpleRegistry;
 
 // This is simple. ROR needs a new object key for each remote object (or its skeleton). 
 // This can be done easily, for example by using a counter.
@@ -11,10 +17,16 @@ public class RORtbl {
   // The table would have a key by ROR.
   private HashMap<RemoteObjectRef, Object> map = null;
   private static int cnt = 0;
-
+  private SimpleRegistry sr;
+  private String srvName;
+  
   // make a new table.
-  public RORtbl() {
+  public RORtbl(String regHostname, int regPort, String srvName) {
     map = new HashMap<RemoteObjectRef, Object>();
+    
+    this.srvName = srvName;
+    // for rebind services
+    sr = LocateSimpleRegistry.getRegistry(regHostname, regPort);  
   }
 
   // add a remote object to the table.
@@ -30,6 +42,16 @@ public class RORtbl {
     for (Class c : o.getClass().getInterfaces()) {
       RemoteObjectRef ror = new RemoteObjectRef(host, port, cnt, c.getName());
       map.put(ror, o);
+      
+      // rebind to registry
+      try {
+        Util.printDebugInfo("prior to rebind: " + ror.toString());
+        
+        sr.rebind(srvName, ror);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      
       cnt++;
     }
   }
