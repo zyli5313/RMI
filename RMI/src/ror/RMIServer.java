@@ -18,6 +18,8 @@ package ror;
 
 import java.net.*;
 
+import cm.CommListener;
+
 public class RMIServer {
   static String host = "localhost";
 
@@ -53,30 +55,11 @@ public class RMIServer {
     // then register it into the table.
     tbl.addObj(host, port, o);
 
-    // create a socket.
-    ServerSocket serverSoc = new ServerSocket(port);
-
-    // Now we go into a loop.
-    // Look at rmiregistry.java for a simple server programming.
-    // The code is far from optimal but in any way you can get basics.
-    // Actually you should use multiple threads, or this easily
-    // deadlocks. But for your implementation I do not ask it.
-    // For design, consider well.
-    while (true) {
-      // (1) receives an invocation request.
-      // (2) creates a socket and input/output streams.
-      // (3) gets the invocation, in martiallled form.
-      // (4) gets the real object reference from tbl.
-      // (5) Either:
-      // -- using the interface name, asks the skeleton,
-      // together with the object reference, to unmartial
-      // and invoke the real object.
-      // -- or do unmarshalling directly and involkes that
-      // object directly.
-      // (6) receives the return value, which (if not marshalled
-      // you should marshal it here) and send it out to the
-      // the source of the invoker.
-      // (7) closes the socket.
-    }
+    
+    
+    CommListener serverlisten = new CommListener(port, tbl);
+    
+    serverlisten.start();
+   
   }
 }
