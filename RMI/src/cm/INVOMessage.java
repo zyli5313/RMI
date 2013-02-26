@@ -13,6 +13,7 @@ public class INVOMessage implements Serializable{
   
   //type 1 : invoke msg
   //type 2 : return msg
+  //type 3:  wrong msg
   private int type;
   private String method;
   private Object[] args;
@@ -36,6 +37,9 @@ public class INVOMessage implements Serializable{
     this.result = result;
   }
   
+  public INVOMessage(){
+    this.type = 3;
+  }
   
   
   public RemoteObjectRef getror(){

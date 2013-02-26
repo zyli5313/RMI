@@ -58,9 +58,31 @@ public class CommServerListenThread extends Thread {
 
     // (4) gets the real object reference from tbl.
     Object calledObj = tbl.findObj(ror);
+    
+    // Handle the case: callObj == null
+    if(calledObj == null){
+      System.out.println("cannot find the called object in the server.");
+      INVOMessage errormsg = new INVOMessage();
+      ObjectOutputStream out = null;
+      try {
+        out = new ObjectOutputStream(socket.getOutputStream());
 
-    // TODO: if callObj == null
+        out.writeObject(errormsg);
 
+        out.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+        myutil.printDebugInfo("sending return bytes error.");
+      }
+      try {
+        socket.close();
+      } catch (IOException e) {
+        myutil.printDebugInfo("close socket error");
+        e.printStackTrace();
+      }
+      return;
+    }
+    
     // (5) Either:
     // -- using the interface name, asks the skeleton,
     // together with the object reference, to unmartial
