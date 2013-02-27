@@ -26,11 +26,20 @@ public class ZipCodeServer_stub implements ZipCodeServer {
   public void initialise(ZipCodeList newlist) {
     Object[] args = new Object[1];
     args[0] = newlist;
-    String[] argsType = null;
+    String[] argsType = new String[1];
+    
+    Method method = null;
+    try {
+      method = ZipCodeServer_stub.class.getMethod("initialise", ZipCodeList.class);
+    } catch (SecurityException e) {
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    }
+
+    argsType[0] = method.getGenericParameterTypes()[0].toString();
+    //String retType = method.getGenericReturnType().toString();
     String retType = null;
-//    String[] argsType = new String[1];
-//    argsType[0] = ZipCodeList.class.getGenericSuperclass().toString();
-//    String retType = void.class.getGenericSuperclass().toString();
     
     INVOMessage invomsg = new INVOMessage(ror, "initialise", args, argsType, retType);
     // get return value
@@ -44,8 +53,18 @@ public class ZipCodeServer_stub implements ZipCodeServer {
     Object[] args = new Object[1];
     args[0] = request;
     String[] argsType = new String[1];
-    argsType[0] = String.class.getGenericSuperclass().toString();
-    String retType = ((ParameterizedType)(String.class.getGenericSuperclass())).getActualTypeArguments()[0].toString();
+    
+    Method method = null;
+    try {
+      method = ZipCodeServer_stub.class.getMethod("find", String.class);
+    } catch (SecurityException e) {
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    }
+    
+    argsType[0] = method.getGenericParameterTypes()[0].toString();
+    String retType = method.getGenericReturnType().toString();
     
     INVOMessage invomsg = new INVOMessage(ror, "find", args, argsType, retType);
     // get return value
@@ -61,8 +80,18 @@ public class ZipCodeServer_stub implements ZipCodeServer {
 //    String[] argsType = new String[1];
     Object[] args = null;
     String[] argsType = null;
-//    argsType[0] = ((ParameterizedType)(void.class.getGenericSuperclass())).getActualTypeArguments()[0].toString();
-    String retType = ((ParameterizedType)(ZipCodeList.class.getGenericSuperclass())).getActualTypeArguments()[0].toString();
+    
+    Method method = null;
+    try {
+      
+      method = ZipCodeServer_stub.class.getMethod("findAll", null);
+    } catch (SecurityException e) {
+      e.printStackTrace();
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    }
+    
+    String retType = method.getGenericReturnType().toString();
     
     INVOMessage invomsg = new INVOMessage(ror, "findAll", args, argsType, retType);
     // get return value

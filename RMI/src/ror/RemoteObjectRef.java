@@ -3,6 +3,43 @@ package ror;
 import java.io.Serializable;
 
 public class RemoteObjectRef implements Remote440 {
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((ip == null) ? 0 : ip.hashCode());
+    result = prime * result + objkey;
+    result = prime * result + port;
+    result = prime * result + ((riname == null) ? 0 : riname.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    RemoteObjectRef other = (RemoteObjectRef) obj;
+    if (ip == null) {
+      if (other.ip != null)
+        return false;
+    } else if (!ip.equals(other.ip))
+      return false;
+    if (objkey != other.objkey)
+      return false;
+    if (port != other.port)
+      return false;
+    if (riname == null) {
+      if (other.riname != null)
+        return false;
+    } else if (!riname.equals(other.riname))
+      return false;
+    return true;
+  }
+
   // default value
   public String ip = "localhost";
 

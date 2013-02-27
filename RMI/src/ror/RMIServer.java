@@ -32,14 +32,18 @@ public class RMIServer {
   // reference to the remote object.
   // As you can see, the exception handling is not done at all.
   public static void main(String args[]) throws Exception {
+    if(args.length != 5) {
+      System.out.format("Usage: RMIServer <InitialClassName> <registryHost> <registryPort> <serviceName> <localListenPort>");
+    }
+    
     String InitialClassName = args[0];
     String registryHost = args[1];
     int registryPort = Integer.parseInt(args[2]);
     String serviceName = args[3];
-
+    
     // it should have its own port. assume you hardwire it.
     host = (InetAddress.getLocalHost()).getHostName();
-    port = 12345;
+    port = Integer.parseInt(args[4]);
 
     // it now have two classes from MainClassName:
     // (1) the class itself (say ZipCpdeServerImpl) and

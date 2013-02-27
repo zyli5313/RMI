@@ -54,13 +54,18 @@ public class CommModule {
     marshallSend(rmimsg);
 
     // recv reply
-    INVOMessage recmsg = unmarshallRecv();
+    INVOMessage recmsg = null;
+    if(rmimsg.getreturntype() != null && !rmimsg.getreturntype().equals("void"))
+      recmsg = unmarshallRecv();
     
     // close 
     try {
-      in.close();
-      out.close();
-      ClientSocket.close();
+      if(in != null)
+        in.close();
+      if(out != null)
+        out.close();
+      if(ClientSocket != null)
+        ClientSocket.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
