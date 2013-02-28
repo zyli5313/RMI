@@ -11,6 +11,7 @@ import ror.RemoteObjectRef;
 /**
  * ZipCodeServerImpl_stub: stub class for ZipCodeServerImpl
  * 
+ * @author Zeyuan Li
  * */
 public class ZipCodeServer_stub implements ZipCodeServer {
   private RemoteObjectRef ror;

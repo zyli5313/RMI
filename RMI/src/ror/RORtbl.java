@@ -8,6 +8,12 @@ import cm.Util;
 import registry.LocateSimpleRegistry;
 import registry.SimpleRegistry;
 
+/**
+ * ROR table class that store the ror of starting service process in the server side
+ * 
+ * @author Zeyuan Li
+ * */
+
 // This is simple. ROR needs a new object key for each remote object (or its skeleton). 
 // This can be done easily, for example by using a counter.
 // We also assume a remote object implements only one interface, which is a remote interface.

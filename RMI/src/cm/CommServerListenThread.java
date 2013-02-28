@@ -24,8 +24,6 @@ public class CommServerListenThread extends Thread {
 
   private InputStream is;
 
-  private Serializer ser;
-
   private MyUtil myutil = new MyUtil("CommServerListenThread");
 
   public CommServerListenThread(Socket socket, RORtbl tbl) {

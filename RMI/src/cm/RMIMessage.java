@@ -6,6 +6,10 @@ import java.util.Arrays;
 import ror.Remote440;
 import ror.RemoteObjectRef;
 
+/**
+ * deprecated message class
+ * no longer used
+ * */
 public class RMIMessage implements Remote440 {
 
   public static final byte INV = 1;

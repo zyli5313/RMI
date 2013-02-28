@@ -11,6 +11,11 @@ import ror.RemoteObjectRef;
 
 import cm.Util;
 
+/**
+ * Separate RMI registry request handler class. Handle request in a new class
+ * 
+ * @author Zeyuan Li
+ * */
 public class RMIRegistryHdler implements Runnable {
 
   private Socket cltsoc = null;

@@ -2,6 +2,11 @@ package ror;
 
 import java.io.Serializable;
 
+/**
+ * RemoteObjectReference class to indentify process across JVM
+ * 
+ * @author Zeyuan Li
+ * */
 public class RemoteObjectRef implements Remote440 {
   @Override
   public int hashCode() {

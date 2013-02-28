@@ -9,6 +9,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import ror.RORtbl;
 import ror.RemoteObjectRef;
 
+/**
+ * RMI registry server (centrilized)
+ * 
+ * @author Zeyuan Li
+ * */
 public class RMIRegistry {
   
   private static int port = 4443;  // registry listen port

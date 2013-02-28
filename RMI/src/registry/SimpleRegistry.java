@@ -8,6 +8,11 @@ import cm.Util;
 
 import ror.RemoteObjectRef;
 
+/**
+ * Real registry class that provide loopup and rebind service
+ * 
+ * @author Zeyuan Li
+ * */
 public class SimpleRegistry {
   // registry holds its port and host, and connects to it each time.
   public String Host;

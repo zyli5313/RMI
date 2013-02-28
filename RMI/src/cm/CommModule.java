@@ -8,9 +8,13 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/**
+ * CommModule: communication module for marshaling, send, receive and unmarshaling
+ * 
+ * @author Zeyuan Li
+ * */
 public class CommModule {
 
-  // public CommSender sender;
   private Socket ClientSocket;
 
   private DataOutputStream out;
@@ -20,23 +24,6 @@ public class CommModule {
   private String hostname;
 
   private int port;
-
-  public Serializer ser;
-
-  public CommModule() {
-    ser = new Serializer();
-  }
-
-  // public void marshallSend(RMIMessage rmimsg) {
-  // if(rmimsg == null) return;
-  //
-  // byte[] sendBytes = ser.serializeObj(rmimsg);
-  // sender = new CommSender(rmimsg.ror.ip, rmimsg.ror.port, rmimsg.type, sendBytes);
-  //
-  // sender.run(); // close
-  //
-  // Util.printDebugInfo("marshalled and sent");
-  // }
 
   public INVOMessage marsSendUnmarsRecv(INVOMessage rmimsg) {
     hostname = rmimsg.ror.ip;
@@ -50,7 +37,6 @@ public class CommModule {
     }
 
     // send invoke
-    //byte[] sendBytes = ser.serializeObj(rmimsg);
     marshallSend(rmimsg);
 
     // recv reply
@@ -108,14 +94,6 @@ public class CommModule {
     }
 
   }
-
-//  public RMIMessage unmarshall(byte[] recvBytes) {
-//    if (recvBytes == null)
-//      return null;
-//
-//    RMIMessage rmimsg = (RMIMessage) ser.deserializeObj(recvBytes);
-//    return rmimsg;
-//  }
 
 
 }
