@@ -1,5 +1,6 @@
 package registry;
 
+import java.rmi.RemoteException;
 import java.util.*;
 import java.net.*;
 import java.io.*;
@@ -26,7 +27,7 @@ public class SimpleRegistry {
   }
 
   // returns the ROR (if found) or null (if else)
-  public RemoteObjectRef lookup(String serviceName) throws IOException {
+  public RemoteObjectRef lookup(String serviceName) throws IOException, RemoteException {
     // open socket.
     // it assumes registry is already located by locate registry.
     // you should usually do try-catch here (and later).
@@ -65,9 +66,10 @@ public class SimpleRegistry {
     
       Util.printDebugInfo(ror.toString());
     } else {
-      System.out.println("it is not found!.");
+      throw new RemoteException("Service not found!.");
+      //System.out.println("it is not found!.");
 
-      ror = null;
+      //ror = null;
     }
 
     // close the socket.

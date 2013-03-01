@@ -93,6 +93,6 @@ public class RemoteObjectRef implements Remote440 {
   
   @Override
   public String toString() {
-    return String.format("ip:%s\tport:%d\tobjkey:%d\triname:%s\n", ip, port, objkey, riname);
+    return String.format("ip:%s\t port:%d \tobjkey:%d \t riname:%s\n", ip, port, objkey, riname);
   }
 }

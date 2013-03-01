@@ -1,6 +1,7 @@
 package ror;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.*;
 
 import cm.Util;
@@ -27,7 +28,7 @@ public class RORtbl {
   private String srvName;
   
   // make a new table.
-  public RORtbl(String regHostname, int regPort, String srvName) {
+  public RORtbl(String regHostname, int regPort, String srvName) throws RemoteException {
     map = new HashMap<RemoteObjectRef, Object>();
     
     this.srvName = srvName;

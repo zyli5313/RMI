@@ -1,5 +1,6 @@
 package registry;
 import java.net.*;
+import java.rmi.RemoteException;
 import java.io.*;
 
 public class LocateSimpleRegistry {
@@ -9,7 +10,7 @@ public class LocateSimpleRegistry {
   // actually the registry is just a pair of host IP and port.
   // inefficient? well you can change it as you like.
   // for the rest, you can see SimpleRegistry.java.
-  public static SimpleRegistry getRegistry(String host, int port) {
+  public static SimpleRegistry getRegistry(String host, int port) throws RemoteException{
     // open socket.
     try {
       Socket soc = new Socket(host, port);
@@ -29,8 +30,7 @@ public class LocateSimpleRegistry {
         return null;
       }
     } catch (Exception e) {
-      System.out.println("nobody is there!" + e);
-      return null;
+      throw new RemoteException("nobody is there!" + e);
     }
   }
 }
