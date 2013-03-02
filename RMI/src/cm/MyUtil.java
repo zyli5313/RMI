@@ -22,6 +22,8 @@ public class MyUtil {
   public static final int RET = 2;
   public static final int EX = 3;
   
+  public static final int SOCKET_TIMEOUT_LENGTH = 3000; // 3s
+  
   // registry socket msg
   public static final String LOOKUP = "look up";
   public static final String REBIND = "rebind";

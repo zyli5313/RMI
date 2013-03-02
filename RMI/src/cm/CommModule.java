@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.rmi.RemoteException;
 
 /**
  * CommModule: communication module for marshaling, send, receive and unmarshaling
@@ -27,11 +29,14 @@ public class CommModule {
 
   private int port;
 
-  public INVOMessage marsSendUnmarsRecv(INVOMessage rmimsg) {
+  public INVOMessage marsSendUnmarsRecv(INVOMessage rmimsg) throws RemoteException {
     hostname = rmimsg.ror.ip;
     port = rmimsg.ror.port;
     try {
       ClientSocket = new Socket(hostname, port);
+      // in case of connection failure.
+      ClientSocket.setSoTimeout(Util.SOCKET_TIMEOUT_LENGTH);
+      
     } catch (UnknownHostException e) {
       e.printStackTrace();
     } catch (IOException e) {
@@ -61,13 +66,15 @@ public class CommModule {
     return recmsg;
   }
   
-  public INVOMessage unmarshallRecv() {
+  public INVOMessage unmarshallRecv() throws RemoteException {
     ObjectInputStream in = null;
     INVOMessage recvmsg = null;
     try {
       in = new ObjectInputStream(ClientSocket.getInputStream());  
       
       recvmsg = (INVOMessage)in.readObject();
+    } catch (SocketException e) { // socket timeout
+      throw new RemoteException("Remote connection error!");
     } catch (IOException e) {
       e.printStackTrace();
     } catch (ClassNotFoundException e) {
@@ -77,7 +84,7 @@ public class CommModule {
     return recvmsg;
   }
 
-  public void marshallSend(INVOMessage msg) {
+  public void marshallSend(INVOMessage msg) throws RemoteException {
     ObjectOutputStream out = null;
     try {
       out = new ObjectOutputStream(ClientSocket.getOutputStream());   
@@ -90,10 +97,12 @@ public class CommModule {
     } catch (UnknownHostException e) {
       System.err.println("ByteSender: Don't know about host: " + hostname);
       System.exit(1);
+    } catch (SocketException e) { // socket timeout
+      throw new RemoteException("Remote connection error!");
     } catch (IOException e) {
       System.err.println("ByteSender: Couldn't get I/O for the connection to:" + hostname);
       System.exit(1);
-    }
+    } 
 
   }
 
