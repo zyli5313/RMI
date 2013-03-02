@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.*;
 
-import cm.Util;
+import cm.MyUtil;
 
 import registry.LocateSimpleRegistry;
 import registry.SimpleRegistry;
@@ -26,6 +26,7 @@ public class RORtbl {
   private static int cnt = 0;
   private SimpleRegistry sr;
   private String srvName;
+  private MyUtil  Util = new MyUtil("RORtbl");
   
   // make a new table.
   public RORtbl(String regHostname, int regPort, String srvName) throws RemoteException {

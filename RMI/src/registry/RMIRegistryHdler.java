@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import ror.RemoteObjectRef;
 
-import cm.Util;
+import cm.MyUtil;
 
 /**
  * Separate RMI registry request handler class. Handle request in a new class
@@ -20,7 +20,9 @@ public class RMIRegistryHdler implements Runnable {
 
   private Socket cltsoc = null;
   private ConcurrentHashMap<String, RemoteObjectRef> srvmap = null;
-
+  private MyUtil Util = new MyUtil("RMIRegistryHdler");
+  
+  
   public RMIRegistryHdler(Socket soc, ConcurrentHashMap<String, RemoteObjectRef> srvmap) {
     cltsoc = soc;
     this.srvmap = srvmap;

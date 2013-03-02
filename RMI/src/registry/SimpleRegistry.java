@@ -5,7 +5,7 @@ import java.util.*;
 import java.net.*;
 import java.io.*;
 
-import cm.Util;
+import cm.MyUtil;
 
 import ror.RemoteObjectRef;
 
@@ -20,6 +20,9 @@ public class SimpleRegistry {
 
   public int Port;
 
+  private MyUtil Util = new MyUtil("SimpleRegistry");
+  
+  
   // ultra simple constructor.
   public SimpleRegistry(String IPAdr, int PortNum) {
     Host = IPAdr;

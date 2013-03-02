@@ -22,6 +22,8 @@ public class CommModule {
   private DataInputStream in;
 
   private String hostname;
+  
+  private MyUtil Util = new MyUtil("CommModule");
 
   private int port;
 

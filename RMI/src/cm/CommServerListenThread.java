@@ -37,8 +37,9 @@ public class CommServerListenThread extends Thread {
       System.out.println("Error type in INVOMessage.");
       return;
     }
+    
     myutil.printDebugInfo(invomsg.toString());
-
+    
     RemoteObjectRef ror = invomsg.getror();
     String methodname = invomsg.getmethod();
     Object[] args = invomsg.getargs();
@@ -46,6 +47,8 @@ public class CommServerListenThread extends Thread {
     String returntype = invomsg.getreturntype();
     int argnum;
     boolean returnvoid = false;
+    boolean remoteexception = false;
+    
     if (args != null) {
       argnum = args.length;
     } else
@@ -64,13 +67,11 @@ public class CommServerListenThread extends Thread {
       ObjectOutputStream out = null;
       try {
         out = new ObjectOutputStream(socket.getOutputStream());
-
         out.writeObject(errormsg);
-
         out.close();
       } catch (IOException e) {
         e.printStackTrace();
-        myutil.printDebugInfo("sending return bytes error.");
+        myutil.printDebugInfo("sending errormsg error.");
       }
       try {
         socket.close();
@@ -143,32 +144,50 @@ public class CommServerListenThread extends Thread {
           // Handle any exceptions thrown by method to be invoked.
         } catch (InvocationTargetException x) {
           System.out.println("invocation of " + mname + "failed.");
+          remoteexception = true;
         }
       }
-
     } catch (IllegalAccessException x) {
       x.printStackTrace();
+      System.out.println("IllegalAccessException");
+      remoteexception = true;
     }
 
     // marshal the return value here and send it out to the
     // the source of the invoker.
-    if (returnmsg == null) {
+    if (returnmsg == null && !remoteexception) {
       System.out.println("no return object from invoked method: " + methodname);
+      
+      //send a success result message with void return value
+      returnmsg = new INVOMessage(null);
       return;
     }
-
-    ObjectOutputStream out = null;
-    try {
-      out = new ObjectOutputStream(socket.getOutputStream());
-
-      out.writeObject(returnmsg);
-
-      out.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-      myutil.printDebugInfo("sending return bytes error.");
+    
+    if(remoteexception){
+      //send remoteexception message
+      INVOMessage errormsg = new INVOMessage();
+      ObjectOutputStream out = null;
+      try {
+        out = new ObjectOutputStream(socket.getOutputStream());
+        out.writeObject(errormsg);
+        out.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+        myutil.printDebugInfo("sending errormsg error.");
+      }
     }
-
+    else{
+      ObjectOutputStream out = null;
+      try {
+        out = new ObjectOutputStream(socket.getOutputStream());
+        out.writeObject(returnmsg);
+        out.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+        myutil.printDebugInfo("sending return bytes error.");
+      }
+    }
+    
     // (7) closes the socket.
     try {
       socket.close();

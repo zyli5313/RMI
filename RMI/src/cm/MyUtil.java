@@ -2,12 +2,12 @@ package cm;
 
 public class MyUtil {
 
-  public static boolean debug = true;
+  public static boolean debug = false;
   public static String scope = "Not specified scope";
   
   public MyUtil(){
-    
   }
+  
   public MyUtil(String scope){
     this.scope = scope;
     
@@ -18,6 +18,10 @@ public class MyUtil {
       System.out.println(scope + ": " + s);
   }
   
+  public static final int INV = 1;
+  public static final int RET = 2;
+  public static final int EX = 3;
+  
   // registry socket msg
   public static final String LOOKUP = "look up";
   public static final String REBIND = "rebind";
@@ -25,4 +29,5 @@ public class MyUtil {
   public static final String IAMREG = "I am a simple registry.";
   public static final String FOUND = "found service";
   public static final String NOTFOUND = "not found service";
+  public static final String ACK = "ack";
 }

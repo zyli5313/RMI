@@ -6,7 +6,7 @@ import java.rmi.RemoteException;
 
 import cm.CommModule;
 import cm.INVOMessage;
-import cm.Util;
+import cm.MyUtil;
 
 import ror.RemoteObjectRef;
 
@@ -18,6 +18,7 @@ import ror.RemoteObjectRef;
 public class ZipCodeServer_stub implements ZipCodeServer {
   private RemoteObjectRef ror;
   private CommModule cm = new CommModule();
+  private MyUtil Util = new MyUtil("ZipCodeServer_stub");
 
   // this is a constructor.
   public ZipCodeServer_stub() {

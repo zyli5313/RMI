@@ -13,7 +13,7 @@ public class INVOMessage implements Serializable{
   
   //type 1 : invoke msg
   //type 2 : return msg
-  //type 3:  wrong msg
+  //type 3:  wrong msg (remote exception)
   private int type;
   private String method;
   private Object[] args;
