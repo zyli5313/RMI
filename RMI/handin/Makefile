@@ -15,7 +15,7 @@ all:
 
 demo:
 	@echo 'Please open multiple terminal (e.g.1 reg 2 servers 2 clients). make in order (1st:reg, 2nd:server, 3rd:client). Can type wrong service name to see RemoteException'
-	@echo 'Usage: make reg PORT=<registry port num>'
+	@echo 'Usage: make reg REGPORT=<registry port num>'
 	@echo 'Usage: make server REGNAME=<registry name> REGPORT=<registry port num> SRVNAME=<service name> SERVERPORT=<server listen port>'
 	@echo 'Usage: make client REGNAME=<registry name> REGPORT=<registry port num> SRVNAME=<service name>'
 	# sample usage:
